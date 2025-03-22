@@ -13,9 +13,18 @@ function createSearchSignal(key: string, def: string = "") {
   };
   return { init, val, set };
 }
-function inp(param: ReturnType<typeof createSearchSignal>) {
-  return (ev: InputEvent & { target: HTMLTextAreaElement }) =>
-    param.set(ev.target.value);
+type SearchSignal = ReturnType<typeof createSearchSignal>;
+function Editable(props: { sig: SearchSignal; id: string }) {
+  return (
+    <textarea
+      name={props.id}
+      id={props.id}
+      onInput={(ev) => props.sig.set(ev.target.value)}
+      class="bg-blue-700 p-2 text-sky-300 text-lg"
+    >
+      {props.sig.init}
+    </textarea>
+  );
 }
 
 function App() {
@@ -27,22 +36,16 @@ function App() {
   const charcount = () => [...chr.segment(code.val())].length;
   const bytecount = () => byt.encode(code.val()).length;
   return (
-    <div class="font-mono">
-      <div class="flex flex-col">
+    <div class="font-mono bg-blue-400 min-h-screen">
+      <div class="flex flex-col p-10">
         <label for="head">Header:</label>
-        <textarea name="head" id="head" onInput={inp(head)}>
-          {head.init}
-        </textarea>
+        <Editable id="head" sig={head} />
         <label for="code">
           Code: ({charcount()} characters, {bytecount()} bytes)
         </label>
-        <textarea name="code" id="code" onInput={inp(code)}>
-          {code.init}
-        </textarea>
+        <Editable id="code" sig={code} />
         <label for="foot">Footer:</label>
-        <textarea name="foot" id="foot" onInput={inp(foot)}>
-          {foot.init}
-        </textarea>
+        <Editable id="foot" sig={foot} />
       </div>
     </div>
   );
