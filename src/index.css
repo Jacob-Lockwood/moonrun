@@ -1,0 +1,8 @@
+@import "tailwindcss";
+@font-face {
+  font-family: "JuliaMono";
+  src: url("/JuliaMono-Regular.woff2");
+}
+@theme {
+  --font-mono: JuliaMono, ui-monospace;
+}

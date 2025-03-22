@@ -1,33 +1,37 @@
 import { createSignal } from "solid-js";
-import solidLogo from "./assets/solid.svg";
-import viteLogo from "/vite.svg";
 
 function App() {
-  const [count, setCount] = createSignal(0);
-
+  const url = new URL(location.href);
+  const initialCode = decodeURIComponent(url.searchParams.get("r") ?? "");
+  const [code, setCode] = createSignal(initialCode);
+  const updCode = (s: string) => {
+    url.searchParams.set("r", encodeURIComponent(s));
+    history.pushState({}, "", url.toString());
+    setCode(s);
+  };
+  const byt = new TextEncoder();
+  const chr = new Intl.Segmenter("en", { granularity: "grapheme" });
+  const charcount = () => [...chr.segment(code())].length;
+  const bytecount = () => byt.encode(code()).length;
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} class="logo" alt="Vite logo" />
-        </a>
-        <a href="https://solidjs.com" target="_blank">
-          <img src={solidLogo} class="logo solid" alt="Solid logo" />
-        </a>
+    <div class="font-mono">
+      <div class="flex flex-col">
+        <label for="head">Header:</label>
+        <textarea name="head" id="head"></textarea>
+        <label for="code">
+          Code: ({charcount()} characters, {bytecount()} bytes)
+        </label>
+        <textarea
+          name="code"
+          id="code"
+          onInput={(ev) => updCode(ev.target.value)}
+        >
+          {initialCode}
+        </textarea>
+        <label for="foot">Footer:</label>
+        <textarea name="foot" id="foot"></textarea>
       </div>
-      <h1>Vite + Solid</h1>
-      <div class="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count()}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p class="read-the-docs">
-        Click on the Vite and Solid logos to learn more
-      </p>
-    </>
+    </div>
   );
 }
 
