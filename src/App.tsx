@@ -20,7 +20,9 @@ function Editable(props: { sig: SearchSignal; id: string }) {
       name={props.id}
       id={props.id}
       onInput={(ev) => props.sig.set(ev.target.value)}
-      class="bg-blue-700 p-2 text-lg text-sky-300"
+      // @ts-ignore
+      spellcheck="false"
+      class="bg-night-900 selection:bg-night-800 rounded-sm p-2 text-lg text-sky-300 outline-2 outline-indigo-800 focus-visible:outline-indigo-500"
     >
       {props.sig.init}
     </textarea>
@@ -33,22 +35,25 @@ function App() {
   const foot = createSearchSignal("f");
   const byt = new TextEncoder();
   const chr = new Intl.Segmenter("en", { granularity: "grapheme" });
-  const charcount = () => [...chr.segment(code.val())].length;
+  const chars = () => Array.from(chr.segment(code.val()), (v) => v.segment);
   const bytecount = () => byt.encode(code.val()).length;
   return (
-    <div class="flex min-h-screen bg-blue-400 font-mono">
+    <div class="bg-night-950 text-moon-300 flex min-h-screen font-mono">
       <div class="flex w-1/2 flex-col gap-2 p-10">
         <label for="head">Header:</label>
         <Editable id="head" sig={head} />
         <label for="code">
-          Code: ({charcount()} characters, {bytecount()} bytes)
+          Code: ({chars().length} characters, {bytecount()} bytes)
         </label>
         <Editable id="code" sig={code} />
         <label for="foot">Footer:</label>
         <Editable id="foot" sig={foot} />
+        <button class="w-max cursor-pointer border-4 border-blue-600 bg-blue-500 p-3 text-sky-200 outline-blue-600 transition-colors hover:outline-1">
+          Run
+        </button>
       </div>
       <div class="flex w-1/2 flex-col p-10">
-        <h2 class="text-2xl">Run ☾</h2>
+        <h2 class="text-moon-100 text-2xl">Run ☾</h2>
       </div>
     </div>
   );

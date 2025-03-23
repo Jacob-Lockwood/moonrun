@@ -5,4 +5,15 @@
 }
 @theme {
   --font-mono: JuliaMono, ui-monospace;
+  --color-night-950: #0c0421;
+  --color-night-900: #130636;
+  --color-night-800: #261454;
+  --color-moon-100: #d8d0e1;
+  --color-moon-300: #a3a2ab;
+  --color-moon-400: #828287;
+  --color-moon-500: #5d5c61;
+  --color-moon-600: #3d3d40;
+  --color-moon-700: #323236;
+  --color-moon-800: #25242b;
+  --color-moon-900: #1e1d24;
 }
